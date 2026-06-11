@@ -4,7 +4,7 @@ from typing import AsyncGenerator
 import json
 
 from schemas import ChatRequest, ChatResponse, Message
-from openai_client import generate_chat, stream_chat
+from llm_client import generate_chat, stream_chat
 from auth import get_current_user
 from utils.sse import sse_message
 from exceptions import ExternalAPIError, UpstreamTimeout
@@ -40,8 +40,15 @@ async def chat_endpoint(req: ChatRequest, user=Depends(get_current_user)):
 
 async def _sse_generator(payload) -> AsyncGenerator[str, None]:
     # stream_chat yields plain text pieces; wrap as SSE
-    async for chunk in stream_chat(payload):
-        yield sse_message(chunk)
+    try:
+        async for chunk in stream_chat(payload):
+            yield sse_message(chunk)
+    except ExternalAPIError as e:
+        # Cannot change HTTP status once streaming started; send an SSE error event then stop.
+        err = {"error": e.message}
+        print(f"Error during streaming: {e}")
+        yield sse_message(json.dumps(err))
+        return
 
 
 @router.post("/chat/stream")

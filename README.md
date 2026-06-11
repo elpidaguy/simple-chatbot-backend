@@ -1,13 +1,13 @@
 # Simple Chatbot Backend
 
-This is a minimal FastAPI backend that proxies chat requests to OpenAI and exposes two endpoints:
+This is a minimal FastAPI backend that proxies chat requests to an LLM provider (Gemini) and exposes two endpoints:
 
 - `POST /api/chat` — non-streaming chat completion
 - `POST /api/chat/stream` — streaming chat completion via SSE (Server-Sent Events)
 
 Setup (local):
 
-1. Copy `.env.example` to `.env` and set `OPENAI_API_KEY` and optionally `TEST_API_TOKEN` / `JWT_SECRET`.
+1. Copy `.env.example` to `.env` and set `GEMINI_API_KEY`, optionally `GEMINI_MODEL`, and `TEST_API_TOKEN` / `JWT_SECRET`.
 2. Create a virtual environment and install:
 
 ```bash

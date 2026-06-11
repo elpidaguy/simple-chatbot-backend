@@ -7,7 +7,9 @@ load_dotenv()
 
 @dataclass
 class Config:
-    openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
+    provider: str = os.getenv("PROVIDER", "gemini")
+    gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
+    gemini_model: str = os.getenv("GEMINI_MODEL", "models/gemini-3.5-flash")
     test_api_token: str = os.getenv("TEST_API_TOKEN", "local-test-token")
     jwt_secret: Optional[str] = os.getenv("JWT_SECRET")
     allowed_origins: List[str] = field(
@@ -17,7 +19,7 @@ class Config:
             if o.strip()
         ]
     )
-    default_model: str = os.getenv("DEFAULT_MODEL", "gpt-4o")
+    default_model: str = os.getenv("DEFAULT_MODEL", "models/gemini-3.5-flash")
     request_timeout_seconds: int = int(os.getenv("REQUEST_TIMEOUT_SECONDS", "60"))
 
 cfg = Config()

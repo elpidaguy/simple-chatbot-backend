@@ -4,6 +4,7 @@ import uvicorn
 
 from config import cfg
 from api.chat import router as chat_router
+from api.models import router as models_router
 from exceptions import external_api_exception_handler, auth_exception_handler, ExternalAPIError, AuthError
 from logging_config import configure_logging
 
@@ -21,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(chat_router)
+app.include_router(models_router)
 
 
 app.add_exception_handler(ExternalAPIError, external_api_exception_handler)
